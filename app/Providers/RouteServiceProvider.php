@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Expr\FuncCall;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,21 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
+
+        //Customer binding
+
+        $this->explitcitBind();
+    }
+
+    /**
+     * Explitcit binding
+     */
+
+    public function explitcitBind()
+    {
+        Route::bind('user', function ($value) {
+            return User::where('id', $value)->first() ?? abort(404);
+        });
     }
 
     /**
